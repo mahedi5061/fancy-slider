@@ -27,22 +27,20 @@ const showImages = (images) => {
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div);
-    toggleSnipper(false)
+    toggleSnipper()
   })
- 
 
 }
 
+
 const getImages = (query) => {
   const url=(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
-  toggleSnipper(true)
+  toggleSnipper()
      fetch(url)
     .then(response => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
-
-
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
@@ -53,9 +51,9 @@ const selectItem = (event, img) => {
     sliders.push(img);
   }  
   else{
-    sliders.pop();
+     sliders.splice(item,1);
   }
-   
+    
 }
 var timer
 const createSlider = () => {
@@ -87,7 +85,7 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   })
   document.getElementById('selected-img-slider').innerHTML='';
-  
+
   //slider duration added.
   if(duration>=0){
     changeSlide(0)
@@ -149,7 +147,7 @@ document.getElementById('search').addEventListener('keypress',function(event){
   }
 })
 //Toggle Spinner
-const toggleSnipper=(show)=>{
+const toggleSnipper=()=>{
     const spinner=document.getElementById('spinner-container');
     spinner.classList.toggle('d-none');
   
