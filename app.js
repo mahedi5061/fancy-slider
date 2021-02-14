@@ -17,6 +17,7 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+  
   // console.log(images);
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
@@ -24,22 +25,25 @@ const showImages = (images) => {
   galleryHeader.style.display = 'flex';
   images.forEach(image => {
     let div = document.createElement('div');
-    div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
+    div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2 mt-5';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div);
-    toggleSnipper()
   })
+  toggleSpinner();
 
 }
 
-
 const getImages = (query) => {
   const url=(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
-  toggleSnipper()
-     fetch(url)
-    .then(response => response.json())
-    .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+  toggleSpinner();
+  setTimeout(function()
+  {
+       fetch(url)
+      .then(response => response.json())
+      .then(data => showImages(data.hits))
+     
+  }, 500);
+
 }
 
 let slideIndex = 0;
@@ -62,17 +66,20 @@ const createSlider = () => {
     selectedImgSlider();
     return;
   }
+ 
   // crate slider previous next area
-  sliderContainer.innerHTML = '';
-  const prevNext = document.createElement('div');
-  prevNext.className = "prev-next d-flex w-100 justify-content-between align-items-center";
-  prevNext.innerHTML = ` 
-  <span class="prev" onclick="changeItem(-1)"><i class="fas fa-chevron-left"></i></span>
-  <span class="next" onclick="changeItem( 1)" ><i class="fas fa-chevron-right"></i></span>
-  `;
-
-  sliderContainer.appendChild(prevNext)
-  document.querySelector('.main').style.display = 'block';
+    sliderContainer.innerHTML = '';
+    const prevNext = document.createElement('div');
+    prevNext.className = "prev-next d-flex w-100 justify-content-between align-items-center";
+    prevNext.innerHTML = ` 
+    <span class="prev" onclick="changeItem(-1)"><i class="fas fa-chevron-left"></i></span>
+    <span class="next" onclick="changeItem( 1)" ><i class="fas fa-chevron-right"></i></span>
+    `;
+  
+    sliderContainer.appendChild(prevNext)
+    document.querySelector('.main').style.display = 'block';
+    
+ 
   // hide image aria
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value||1000;
@@ -147,10 +154,10 @@ document.getElementById('search').addEventListener('keypress',function(event){
   }
 })
 //Toggle Spinner
-const toggleSnipper=()=>{
+const toggleSpinner=()=>{
     const spinner=document.getElementById('spinner-container');
-    spinner.classList.toggle('d-none');
-  
+      spinner.classList.toggle('d-none');
+
 }
 
 const selectedImgSlider=()=>{
